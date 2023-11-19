@@ -78,3 +78,39 @@ class APIClient:
         if token is None:
             raise InvalidToken()
         self.token = token
+
+    """
+    Get the token for the client.
+
+    @return: The token for the client.
+
+    >>> token = client.get_token()
+    """
+    def get_token(self):
+        return self.token
+
+    """
+    Get the session for the client.
+
+    @return: The session for the client.
+
+    >>> session = client.get_session()
+    """
+    async def get_session(self):
+        if self.token is None:
+            raise InvalidToken()
+        response = await self.make_raw_request('session', headers={'Authorization': f"Bearer {self.token}"})
+        response = json.loads(response)
+        return response
+
+    """
+    Get the status for the client.
+
+    @return: The status for the client.
+
+    >>> status = client.get_status()
+    """
+    async def get_status(self):
+        response = await self.make_raw_request('status')
+        response = json.loads(response)
+        return response

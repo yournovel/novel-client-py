@@ -13,3 +13,21 @@ python = "^3.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
+
+[tool.poetry.scripts]
+novel-client-py = "novel_client_py:main"
+
+[tool.poetry.plugins.poetry-plugin]
+version = "^1.0"
+
+[tool.poetry.plugins.poetry-python]
+version = "^1.0"
+
+[tool.poetry.plugins.poetry-publish]
+version = "^1.0"
+
+[tool.poetry.plugins.poetry-unlock]
+version = "^1.0"
+
+[tool.pytest]
+testpaths = ["tests"]
