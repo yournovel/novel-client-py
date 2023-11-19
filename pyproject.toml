@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+name = "novel-client-py"
+version = "0.1.0"
+description = "A python client for the novel API"
+authors = ["Matthew Raaff <matthew@raaff.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
