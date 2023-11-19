@@ -25,7 +25,7 @@ class APIClient:
     @return: The response from the server.
 
     >>> client = NovelClient('http://localhost:15634')
-    >>> output = client.make_raw_request('status', method='POST', data={'status': 'Hello, world!'})
+    >>> output = client.make_raw_request('status', method='POST', data={'client': 'py'})
     >>> print(output)
 
     You should mainly use this method for unimplemented API endpoints, or if you're working on the internal client library.
