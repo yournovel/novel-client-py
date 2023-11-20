@@ -4,7 +4,7 @@
 import aiohttp
 import json
 
-from .novelexception import InvalidKeyfile, InvalidToken, NoKeyfile
+from .novelexception import InvalidToken, NoKeyfile
 
 class APIClient:
     """
