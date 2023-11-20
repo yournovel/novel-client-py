@@ -10,6 +10,7 @@ authors = ["Matthew Raaff <matthew@raaff.dev>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+aiohttp = "^3.8.1" # Currently required, but requests will become an option in the future
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
