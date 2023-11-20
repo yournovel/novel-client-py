@@ -16,6 +16,7 @@ class APIClient:
         self.session = aiohttp.ClientSession()
         self.token = None # Wait for the first request to get a token.
         self.delay = delay # Delay in seconds between auto token refreshes.
+        self.version = 1 # This client is designed for version 1 of the API.
 
     """
     Make a raw request to the API.
