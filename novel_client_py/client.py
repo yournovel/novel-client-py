@@ -2,6 +2,7 @@
 # BSD 3-Clause License
 
 import aiohttp
+import asyncio
 import json
 
 from .novelexception import InvalidToken, NoKeyfile
@@ -10,10 +11,12 @@ class APIClient:
     """
     Create a client to interact with a novel instance's API.
     """
-    async def __init__(self, base_url):
+    async def __init__(self, base_url, delay=1800):
         self.base_url = base_url
         self.session = aiohttp.ClientSession()
         self.token = None # Wait for the first request to get a token.
+        self.delay = delay # Delay in seconds between auto token refreshes.
+        self.version = 1 # This client is designed for version 1 of the API.
 
     """
     Make a raw request to the API.
@@ -114,3 +117,37 @@ class APIClient:
         response = await self.make_raw_request('status')
         response = json.loads(response)
         return response
+
+    """
+    Get a new token for the client.
+
+    @return: The new token for the client.
+
+    >>> token = client.get_new_token()
+    """
+    async def get_new_token(self):
+        response = await self.make_raw_request('auth', method='POST', data={'token': self.token})
+        response = json.loads(response)
+        self.set_token(response['token'])
+        return response
+
+    """
+    Schedule a new async task to get a new token every 30 minutes.
+
+    @return: None
+
+    >>> client.schedule_token_refresh()
+    """
+    def schedule_token_refresh(self):
+        loop = asyncio.get_event_loop()
+        loop.create_task(self._token_refresh())
+
+    """
+    Internal method to refresh the token.
+
+    @return: None
+    """
+    async def _token_refresh(self):
+        while True:
+            await asyncio.sleep(self.delay)
+            await self.get_new_token()
