@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8 # Bare minimum
+        python-version: 3.8
 
     - name: Change working directory
       run: cd ${{ github.workspace }}
@@ -29,6 +29,13 @@ jobs:
       run: |
         poetry install
 
+    - name: Extract Version
+      id: extract_version
+      run: |
+        echo "VERSION=$(poetry version --no-interaction | cut -d ' ' -f 2)" >> $GITHUB_ENV
+        echo "The current version that is being published is ${{ env.VERSION }}!"
+      shell: bash
+
     - name: Build
       run: |
         poetry build
@@ -37,22 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Install Poetry
-      run: |
-        pip install poetry
-
-    - name: Publish release
-      run: |
-        poetry publish --build
-
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/*
+    - name: Create a Release
+      uses: elgohr/Github-Release-Action@v5
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        title: Testing ${{ env.VERSION }}
