@@ -18,6 +18,9 @@ jobs:
       with:
         python-version: 3.8 # Bare minimum
 
+    - name: Change working directory
+      run: cd ${{ github.workspace }}
+
     - name: Install Poetry
       run: |
         pip install poetry
