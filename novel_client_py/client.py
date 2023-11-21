@@ -6,6 +6,7 @@ import asyncio
 import json
 
 from .novelexception import InvalidToken, NoKeyfile
+from .novelmodels import NovelUser
 
 class APIClient:
     """
@@ -151,3 +152,35 @@ class APIClient:
         while True:
             await asyncio.sleep(self.delay)
             await self.get_new_token()
+
+    """
+    Get the version of the API client. This is in every client library.
+
+    @return: The version of the API.
+
+    >>> version = client.get_version()
+    """
+    def get_version(self):
+        return self.version
+
+    """
+    Close the session for the client.
+
+    @return: None
+
+    >>> client.close()
+    """
+    async def close(self):
+        await self.make_raw_request('logout', method='POST', headers={'Authorization': f"Bearer {self.token}"})
+        await self.session.close()
+    
+    """
+    Get the current session's user.
+
+    @return: The current session's user as a NovelUser object.
+
+    >>> user = client.get_user()
+    """
+    async def get_user(self):
+        response = await self.get_session()
+        return NovelUser(response['user'])
