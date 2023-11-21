@@ -1,3 +1,8 @@
+import base64
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+import json
+
 class NovelUser():
     """
     Represents a user on a novel instance.
@@ -12,6 +17,9 @@ class NovelUser():
         self.username = username
         self.token = token
         self.id = id
+
+        self.key = None
+        self.iv = None
 
     """
     Get the user's profile.
@@ -30,3 +38,16 @@ class NovelUser():
     """
     async def get_entries(self, page=1, limit=10):
         return await self.client.make_request(f"users/{self.id}/posts?page={page}&limit={limit}", token=self.token)
+
+    """
+    Decrypt an entry locally.
+
+    @param entry: The entry to decrypt.
+    @return: The decrypted entry in UltraMD.
+    """
+    async def decrypt_entry(self, entry):
+        x = await self.client.make_request(f"users/{self.id}/posts/{entry['id']}", token=self.token)
+        x = json.loads(x)
+        cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
+        decrypted = unpad(cipher.decrypt(base64.b64decode(x['content'])), AES.block_size)
+        return decrypted.decode('utf-8')
