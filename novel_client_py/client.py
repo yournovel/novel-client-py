@@ -12,12 +12,12 @@ class APIClient:
     """
     Create a client to interact with a novel instance's API.
     """
-    async def __init__(self, base_url, delay=1800):
+    async def __init__(self, base_url, delay=1800, version=1):
         self.base_url = base_url
         self.session = aiohttp.ClientSession()
         self.token = None # Wait for the first request to get a token.
         self.delay = delay # Delay in seconds between auto token refreshes.
-        self.version = 1 # This client is designed for version 1 of the API.
+        self.version = version
 
     """
     Make a raw request to the API.
