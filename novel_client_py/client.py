@@ -38,8 +38,12 @@ class APIClient:
         if headers is None:
             headers = {}
         url = f"{self.base_url}/{endpoint}"
-        async with self.session.request(method, url, data=data, headers=headers) as response:
-            return await response.text()
+        try:
+            async with self.session.request(method, url, data=data, headers=headers) as response:
+                return await response.text()
+        except aiohttp.ClientError as e:
+            print(e)
+            return None
 
     """
     Request a session token from the novel instance.
